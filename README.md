@@ -56,7 +56,7 @@ DEMO
 config/database.ymlでデータベース設定を行います。  
   
 ### fsjs_accounts.csv 
-勘定科目マスタ(fsjs_accounts)のデータです。phpMyAdminなどを利用してインポートして下さい。  
+勘定科目マスタ(fsjs_accounts)のCSVデータです。phpMyAdminなどを利用してインポートして下さい。  
 
 ### bundle  
 ```rb
