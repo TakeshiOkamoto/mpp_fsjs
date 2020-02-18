@@ -1,0 +1,47 @@
+- provide(:title, '仕訳 - 表示')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '仕訳の表示'
+
+table.table.table-hover 
+  tr
+    th = "日付"
+    td = sprintf("%04d/%02d/%02d",@fsjs_journal.yyyy,@fsjs_journal.mm,@fsjs_journal.dd)
+  tr
+    th = "借方"
+    td = fsjs_get_account_from_id(@fsjs_journal.debit_account_id)
+  tr
+    th = "貸方"
+    td = fsjs_get_account_from_id(@fsjs_journal.credit_account_id)
+  tr
+    th = "金額"
+    td = @fsjs_journal.money.to_s(:delimited) 
+    
+  tr
+    th = "摘要"
+    td = @fsjs_journal.summary 
+  tr
+    th = "最終更新日"
+    td = @fsjs_journal.updated_at.to_s.sub(/\+0900/, '') 
+
+div
+  div.float-right
+    span = link_to '編集', edit_fsjs_journal_path(@fsjs_journal), class: 'btn btn-primary' 
+    span = raw "&nbsp;&nbsp;&nbsp;"
+    span = link_to '削除', @fsjs_journal, data: { confirm: "\n#{@fsjs_journal.yyyy}/#{@fsjs_journal.mm}/#{@fsjs_journal.dd}の仕訳を削除します。よろしいですか？" }, method: :delete, class: 'btn btn-danger' 
+  div.float-left
+    = link_to '戻る', fsjs_journals_path(yyyy:  @fsjs_journal.yyyy)
+div.clearfix    
+
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '仕訳の表示'
+    
+p 

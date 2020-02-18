@@ -1,0 +1,47 @@
+- provide(:title, '勘定科目 - 表示')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("勘定科目", fsjs_accounts_path)     
+    li.breadcrumb-item.active aria-current="page" = '表示'
+    
+
+table.table.table-hover 
+  tr
+    th style="width:200px;" = FsjsAccount.human_attribute_name(:name)
+    td = @fsjs_account.name
+  tr
+    th = FsjsAccount.human_attribute_name(:types)
+    td = @fsjs_account.types
+  tr
+    th = FsjsAccount.human_attribute_name(:expense_flg)
+    td = @fsjs_account.expense_flg
+  tr
+    th = FsjsAccount.human_attribute_name(:sort_list)
+    td = @fsjs_account.sort_list
+  tr
+    th = FsjsAccount.human_attribute_name(:sort_expense)
+    td = @fsjs_account.sort_expense
+  tr
+    th = "最終更新日"
+    td = @fsjs_account.updated_at.to_s.sub(/\+0900/, '') 
+
+div
+  div.float-right
+    span = link_to '編集', edit_fsjs_account_path(@fsjs_account), class: 'btn btn-primary' 
+    span = raw "&nbsp;&nbsp;&nbsp;"
+    span = link_to '削除', @fsjs_account, data: { confirm: "\n#{@fsjs_account.name} を削除します。\nよろしいですか？" }, method: :delete, class: 'btn btn-danger' 
+  div.float-left
+    = link_to '戻る', fsjs_accounts_path
+div.clearfix    
+
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("勘定科目", fsjs_accounts_path)     
+    li.breadcrumb-item.active aria-current="page" = '表示'
+    
+p    

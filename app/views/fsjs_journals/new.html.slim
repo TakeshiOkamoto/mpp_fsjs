@@ -1,0 +1,28 @@
+- provide(:title, '仕訳 - 新規登録')
+- provide(:submit, '登録する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '仕訳の新規登録'
+
+p
+h1 仕訳の新規登録
+p
+
+= render 'form'
+
+br
+br
+= link_to '戻る', fsjs_journals_path(yyyy:  @fsjs_journal.yyyy)
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '仕訳の新規登録'
+
+
+

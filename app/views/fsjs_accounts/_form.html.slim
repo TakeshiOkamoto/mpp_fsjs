@@ -1,0 +1,31 @@
+= form_with(model: @fsjs_account, local: true) do |f|
+  - if @fsjs_account.errors.any?
+    #error_explanation.text-danger
+      ul
+        - @fsjs_account.errors.full_messages.each do |message|
+          li = message
+
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control', id: 'fsjs_account_name'
+  .form-group
+    = raw '<label for="fsjs_account_types">種類</label>'
+    br
+    - if @fsjs_account.types.present?    
+      = f.select :types, options_for_select(@fsjs_account_types_list,@fsjs_account.types),include_blank: '選択して下さい。',id: 'fsjs_account_types'
+    - else
+      = f.select :types, options_for_select(@fsjs_account_types_list),include_blank: '選択して下さい。',id: 'fsjs_account_types'    
+  .form-group style= "float:left;"
+    = f.label :expense_flg
+    = f.check_box :expense_flg, class: 'form-control', id: 'fsjs_account_expense_flg'
+  .clearfix    
+  .form-group
+    = f.label :sort_list
+    = f.number_field :sort_list, class: 'form-control', id: 'fsjs_account_sort_list'
+  .form-group
+    = f.label :sort_expense
+    = f.number_field :sort_expense, class: 'form-control', id: 'fsjs_account_sort_expense'
+  
+  br
+  br
+  = f.submit yield(:submit) , class: 'btn btn-primary'  

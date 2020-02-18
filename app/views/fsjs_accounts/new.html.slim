@@ -1,0 +1,27 @@
+- provide(:title, '勘定科目 - 新規登録')
+- provide(:submit, '登録する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("勘定科目", fsjs_accounts_path)     
+    li.breadcrumb-item.active aria-current="page" = '新規作成'
+
+p
+h1 新規登録 - 勘定科目
+p
+
+= render 'form'
+
+br
+br
+= link_to '戻る', fsjs_accounts_path
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("勘定科目", fsjs_accounts_path)     
+    li.breadcrumb-item.active aria-current="page" = '新規作成'
+
+p    

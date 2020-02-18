@@ -1,0 +1,44 @@
+- provide(:title, '会計年度 - 表示')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '表示'
+
+table.table.table-hover 
+  tr
+    th style="width:200px;" = FsjsCapital.human_attribute_name(:yyyy)
+    td = @fsjs_capital.yyyy
+  tr
+    th = FsjsCapital.human_attribute_name(:m1)
+    td = @fsjs_capital.m1.to_s(:delimited)  
+  tr
+    th = FsjsCapital.human_attribute_name(:m2)
+    td = @fsjs_capital.m2.to_s(:delimited)  
+  tr
+    th = FsjsCapital.human_attribute_name(:m3)
+    td = @fsjs_capital.m3.to_s(:delimited)  
+  tr
+    th = FsjsCapital.human_attribute_name(:m4)
+    td = @fsjs_capital.m4.to_s(:delimited)  
+
+
+div
+  div.float-right
+    span = link_to '編集', edit_fsjs_capital_path(@fsjs_capital), class: 'btn btn-primary' 
+    span = raw "&nbsp;&nbsp;&nbsp;"
+    span = link_to '削除', @fsjs_capital, data: { confirm: "\n#{@fsjs_capital.yyyy}年を削除します。\nよろしいですか？" }, method: :delete, class: 'btn btn-danger' 
+  div.float-left
+    = link_to '戻る', fsjs_capitals_path
+div.clearfix    
+
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '表示'
+    
+p    

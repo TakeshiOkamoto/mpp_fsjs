@@ -1,0 +1,269 @@
+- provide(:title, t('contents.title'))
+
+br
+h2 ="1. このシステムの流れ"
+p
+= raw "<p>初めての方は" + link_to("会計年度", fsjs_capitals_path) + "で会計年度を新規登録します。"  
+= raw "<br>次に" + link_to("会計年度", fsjs_capitals_path) + "の画面から該当年の「仕訳帳」を選択して「仕訳」を新規登録していきます。</p>"
+
+h2 ="2. 仕訳の記入例"
+p = "「その他の預金」は通帳の事。「前払金」は電子マネーなど先払い。「未払金」はクレジットカードなどの後払い。"
+
+table.table.table-hover 
+ thead
+   tr
+     th 例
+     th 借方
+     th 貸方
+     th 摘要
+ tr
+   td 現金での売上
+   td 現金
+   td 売上(収入)
+   td 1/24 ご依頼○○様、○○広告収入など       
+ tr
+   td 振込での売上
+   td その他の預金
+   td 売上(収入)
+   td 1/24 ご依頼○○様、○○広告収入など
+ tr
+   td 旅費または交通費 ※現金
+   td 旅費交通費
+   td 現金
+   td ホテルまたは交通機関の名称
+ tr
+   td 旅費または交通費 ※クレジットカード
+   td 旅費交通費
+   td 未払金
+   td クレカ - ホテルまたは交通機関の名称   
+ tr
+   td 旅費または交通費 ※電子マネーなど
+   td 旅費交通費
+   td 前払金
+   td ○○ - ホテルまたは交通機関の名称 
+ tr
+   td 旅費または交通費 ※引き落とし
+   td 旅費交通費
+   td その他の預金
+   td ホテルまたは交通機関の名称   
+ tr
+   td 電子マネーの入金
+   td 前払金
+   td 現金
+   td ○○入金    
+ tr
+   td クレジットカードの引き落とし
+   td 未払金
+   td その他の預金
+   td ○○カード引き落とし   
+ tr
+   td rowspan="2" = raw "携帯通信料金の引き落とし<br>※50%などで按分して2つの仕訳にする"
+   td 通信費
+   td その他の預金
+   td 携帯通信料金(按分50%)  
+ tr
+   td 事業主貸
+   td その他の預金
+   td 携帯通信料金(按分50%)  
+ tr
+   td 事業主の引き落とし ※私的利用 
+   td 事業主貸
+   td その他の預金
+   td 事業主○○引き落とし
+ tr
+   td 事業主のクレジットカード ※私的利用 
+   td 事業主貸
+   td 未払金
+   td ○○カード - ○○
+ tr
+   td 事業主に現金を移動
+   td 事業主貸
+   td 現金
+   td 事業主へ 
+ tr
+   td 事業とは関係がない入金
+   td その他預金
+   td 事業主借
+   td 給料、年金、生命保険割戻金など        
+ tr
+   td 銀行の利息(ゆうちょ銀行の受取利子)
+   td その他預金
+   td 事業主借
+   td 利息(受取利子)                 
+ tr
+   td 現金が不足した際、現金を増やす
+   td 現金
+   td 事業主借
+   td 事業主からの現金 
+
+p
+  = "※「通帳、クレジットカード」などを事業利用と私的利用の両方で使用している場合はその全てを仕訳に登録します。"
+  br
+  = "※「携帯通信料金、水道光熱費、地代家賃」などは客観的で合理性がある按分で事業利用と私的利用で金額を分割します。"
+
+#report
+h2 ="3. 青色申告決算書の出力"
+
+- cnt =0
+p style="margin-top:24px;margin-bottom:24px;"
+
+  / 会計年度を5年毎に改行する
+  - @capital.each do |capital|
+    span 
+      = link_to (capital.yyyy.to_s() +"年度"), yyyy: capital.yyyy, anchor: "report"
+      = raw "&nbsp;&nbsp;"
+      - if (cnt == 4)
+        = raw "<br>"  
+        - cnt =0
+      - else
+        - cnt += 1           
+  
+  / 会計年度が未登録          
+  - if @capital.blank?
+    p 会計年度が登録されていません。
+
+- if params[:yyyy].present?
+  p = "次の3つの表を元に国税庁のWebサイトで青色申告決算書を作成します。"
+  h3 = params[:yyyy].to_s() + "年度"  
+  
+  .p-1.bg-primary.text-white = "損益計算書"
+  
+  p
+  h5 = "[売上]"
+  p
+  table.table.table-hover 
+    thead
+      tr
+        th style="width:250px;" =  "科目"      
+        th 金額
+    tr
+      td = "売上(収入)金額"
+      td = @report_pl_total.to_s(:delimited)
+    
+  p
+  h5 = "[経費]"
+  p
+  table.table.table-hover 
+    thead
+      tr
+        th style="width:250px;" =  "科目"         
+        th 金額
+    - keihi_total =0   
+    - @report_pl_keihi.each_with_index do |obj,i|    
+      tr
+        td = obj[:name]
+        td = obj[:money].to_s(:delimited)
+        - keihi_total += obj[:money]
+    tr
+      th 計
+      td =  keihi_total.to_s(:delimited)    
+    
+  p
+  h5 = "[所得金額]"
+  p
+  - income = (@report_pl_total - keihi_total)
+  table.table.table-hover 
+    thead
+      tr
+        th style="width:250px;" =  "科目"      
+        th 金額
+    tr
+      td = raw "青色申告特別控除前の<br>所得金額 ※売上 - 経費"
+      td = income.to_s(:delimited)  
+    tr
+      td = "青色申告特別控除額"
+      td = "650,000"    
+    tr
+      th = "所得金額"
+      - if income - 650000 > 0
+        td = (income - 650000).to_s(:delimited)
+      - else
+        td = "0"  
+         
+              
+  .p-1.bg-primary.text-white = "月別売上(収入)金額及び仕入金額 ※売上のみ"  
+  table.table.table-hover 
+    thead
+      tr
+        th style="width:250px;" 月      
+        th 売上(収入)金額
+    - @report_month.each_with_index do |obj,i|        
+      tr    
+        td = (i+1).to_s() +"月"
+        td = obj[:money].to_s(:delimited)
+    tr
+      th 計
+      td =  @report_pl_total.to_s(:delimited)
+      
+      
+  .p-1.bg-primary.text-white = "貸借対照表" 
+  
+  p
+  h5 = "[資産の部]"
+  p   
+  
+  table.table.table-hover 
+    thead
+      tr
+        th style="width:250px;" 科目      
+        th 1月1日(期首)    
+        th 12月31日(期末)      
+    tr
+      td 現金     
+      td = @report_bs_st[:m1].to_s(:delimited)    
+      td = @report_bs_m1.to_s(:delimited)  
+    tr
+      td その他の預金     
+      td = @report_bs_st[:m2].to_s(:delimited)    
+      td = @report_bs_m2.to_s(:delimited) 
+    tr
+      td 前払金     
+      td = @report_bs_st[:m3].to_s(:delimited)    
+      td = @report_bs_m3.to_s(:delimited)   
+    tr
+      td 事業主貸     
+      td     
+      td = @report_bs_debit.to_s(:delimited)
+    tr
+      th 合計     
+      td = (@report_bs_st[:m1] + @report_bs_st[:m2] +@report_bs_st[:m3]).to_s(:delimited)     
+      td = (@report_bs_m1 + @report_bs_m2 + @report_bs_m3 + @report_bs_debit).to_s(:delimited)   
+  p
+  h5 = "[負債・資本の部]"
+  p   
+  
+  - capital_total = @report_bs_st[:m1] + @report_bs_st[:m2] + @report_bs_st[:m3]  - @report_bs_st[:m4]
+  table.table.table-hover 
+    thead
+      tr
+        th style="width:250px;" 科目      
+        th 1月1日(期首)    
+        th 12月31日(期末)      
+    tr
+      td 未払金     
+      td = @report_bs_st[:m4].to_s(:delimited)    
+      td = @report_bs_m4.to_s(:delimited) 
+    tr
+      td 事業主借     
+      td     
+      td = @report_bs_credit.to_s(:delimited)             
+    tr
+      td 元入金     
+      td = capital_total.to_s(:delimited)     
+      td = capital_total.to_s(:delimited)   
+    tr
+      td = raw "青色申告特別控除前の<br>所得金額 ※売上 - 経費"
+      td    
+      td = income.to_s(:delimited) 
+    tr
+      th 合計     
+      td =  (@report_bs_st[:m4] + capital_total).to_s(:delimited)   
+      td =  (@report_bs_m4 + @report_bs_credit + capital_total + income).to_s(:delimited)   
+      
+  / 貸借対照表の合計値の確認
+  - a1 = (@report_bs_st[:m1] + @report_bs_st[:m2] +@report_bs_st[:m3])
+  - a2 = (@report_bs_m1 + @report_bs_m2 + @report_bs_m3 + @report_bs_debit)
+  - b1 = (@report_bs_st[:m4] + capital_total)
+  - b2 = (@report_bs_m4 + @report_bs_credit + capital_total + income)
+  -if (!(a1 == b1 && a2 == b2)) 
+    p style="color:red" = "「資産の部」と「負債・資本の部」の1月1日、12月31日の合計が一致しません。全ての仕訳を確認して下さい。"

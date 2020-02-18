@@ -1,0 +1,78 @@
+- provide(:title, '仕訳帳')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '仕訳帳'
+    
+p
+h1 ="仕訳帳("+ params[:yyyy] + "年)"
+p
+
+p = "仕訳は1/1から順番に登録して下さい。現金、その他の預金、前払金、未払金は入力誤り判定機能付きです。"
+
+p = link_to '仕訳の新規登録', new_fsjs_journal_path(yyyy: params[:yyyy]),class: 'btn btn-primary'  
+
+h5 =  "[ 基本情報 ]" 
+p
+table.table.table-hover 
+  tr
+    th 元入金
+    td
+      = " 現金 : " + @capital[0][:m1].to_s(:delimited)
+      = " その他の預金 : " + @capital[0][:m2].to_s(:delimited)
+      = " 前払金 : " + @capital[0][:m3].to_s(:delimited)
+      = " 未払金 : " + @capital[0][:m4].to_s(:delimited)  
+  tr
+    th 12/31(期末)
+    td
+      = " 現金 : " + @money.to_s(:delimited)
+      = " その他の預金 : " + @deposit.to_s(:delimited)
+      = " 前払金 : " + @advance_payment.to_s(:delimited)
+      = " 未払金 : " + @accounts_payable.to_s(:delimited)  
+      = " 売上 : " + @sales.to_s(:delimited)
+      
+p
+h5 =  "[ 仕訳 ]"
+p
+
+table.table.table-hover 
+  thead
+    tr
+      th = "日付"
+      th = "借方"
+      th = "貸方"
+      th = FsjsJournal.human_attribute_name(:money)
+      th = FsjsJournal.human_attribute_name(:summary)      
+      th
+  - @fsjs_journals.each do |journal|
+    tr
+      td
+        = link_to (sprintf("%02d",journal.mm)  + "/" +  sprintf("%02d",journal.dd)), journal
+      td
+        = fsjs_get_account_from_id(journal.debit_account_id)
+      td
+        = fsjs_get_account_from_id(journal.credit_account_id)
+      td
+        = journal.money.to_s(:delimited)         
+      td style="width:300px;"
+        = journal.summary
+      td
+        = link_to '編集', edit_fsjs_journal_path(journal), class: 'btn btn-primary' 
+        = raw "&nbsp;&nbsp;&nbsp;"
+        = link_to '削除', journal, method: :delete, data: { confirm: "\n#{journal.mm}/#{journal.dd}の仕訳を削除します。よろしいですか？"  }, class: 'btn btn-danger' 
+
+.mb-3
+  = paginate @fsjs_journals
+  = page_entries_info @fsjs_journals
+  
+br
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item =link_to("会計年度", fsjs_capitals_path)     
+    li.breadcrumb-item.active aria-current="page" = '仕訳帳'
+
+p      

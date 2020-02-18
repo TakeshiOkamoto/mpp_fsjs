@@ -1,0 +1,13 @@
+p
+h1 ログイン
+p
+      
+p
+= form_with scope: :login, local: true do |f|
+  .form-group
+    = f.label :name, '名前'
+    = f.text_field :name, class: 'form-control', id: 'login_email'
+  .form-group
+    = f.label :password, 'パスワード'
+    = f.password_field :password, class: 'form-control', id: 'login_password'
+  = f.submit 'ログインする', class: 'btn btn-primary'

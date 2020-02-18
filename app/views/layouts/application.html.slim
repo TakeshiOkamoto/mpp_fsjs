@@ -1,0 +1,40 @@
+doctype html
+html lang="ja"
+  head
+    = raw '<meta charset="UTF-8">'
+    =  "\n"    
+    title = yield(:title) 
+    =  "\n"      
+    = raw '<meta name="robots" content="noindex, nofollow" />'
+    =  "\n"      
+    = raw '<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1" />'
+    =  "\n"    
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_pack_tag 'application'
+    
+  body
+  
+    .app-title.navbar.navbar-expand-md.navbar-light.bg-primary
+     .navbar-brand.text-white
+       = ' ' +  t('contents.title')
+         
+     ul.navbar-nav.ml-auto
+       - if fsjs_current_user.present?
+         li.nav-item= link_to 'ホーム',  root_path, class: 'nav-link',style: "color:#fff;"  
+         li.nav-item= link_to '会計年度',  fsjs_capitals_path, class: 'nav-link',style: "color:#fff;"            
+         li.nav-item= link_to '勘定科目',  fsjs_accounts_path, class: 'nav-link',style: "color:#fff;" 
+         li.nav-item= link_to 'ログアウト',  logout_path, class: 'nav-link',style: "color:#fff;", method: :delete       
+    .container
+      - if flash.notice.present?
+        .alert.alert-success id="msg_notice" = flash.notice
+      - if flash.alert.present?
+        .alert.alert-danger id="msg_alert"= flash.alert  
+      = yield
+    
+      br
+    
+      nav.container.bg-primary.p-2.text-center
+        .text-center.text-white = "Financial Statements & Journal System"
+        .text-center.text-white = "Copyright 2020 Takeshi Okamoto All Rights Reserved."  

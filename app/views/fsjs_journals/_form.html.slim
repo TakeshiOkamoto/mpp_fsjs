@@ -1,0 +1,55 @@
+= form_with(model: @fsjs_journal, local: true) do |f|
+  - if @fsjs_journal.errors.any?
+    #error_explanation.text-danger
+      ul
+        - @fsjs_journal.errors.full_messages.each do |message|
+          li = message
+
+  div.alert.alert-primary role="alert" =  '日付'
+  .form-group
+    = @fsjs_journal.yyyy.to_s() +"年"
+    = f.hidden_field :yyyy, class: 'form-control', id: 'fsjs_journal_yyyy'  
+  .form-group
+    = f.label :mm
+    = f.number_field :mm, class: 'form-control', id: 'fsjs_journal_mm'
+  .form-group
+    = f.label :dd
+    = f.number_field :dd, class: 'form-control', id: 'fsjs_journal_dd'
+
+  div.alert.alert-primary role="alert" =  '借方 ※大まかに言うとプラスのイメージ'
+    
+  .form-group
+    - if @fsjs_journal.debit_account_id?    
+      = f.select :debit_account_id, options_for_select(@fsjs_account_debits_list,@fsjs_journal.debit_account_id),include_blank: '選択して下さい。',id: 'fsjs_journal_debit_account_id'
+    - else
+      = f.select :debit_account_id, options_for_select(@fsjs_account_debits_list),include_blank: '選択して下さい。',id: 'fsjs_journal_debit_account_id'   
+
+  div.alert.alert-primary role="alert" =  '貸方 ※大まかに言うとマイナスのイメージ'
+    
+  .form-group
+    - if @fsjs_journal.credit_account_id?    
+      = f.select :credit_account_id, options_for_select(@fsjs_account_credits_list,@fsjs_journal.credit_account_id),include_blank: '選択して下さい。',id: 'fsjs_journal_credit_account_id'
+    - else
+      = f.select :credit_account_id, options_for_select(@fsjs_account_credits_list),include_blank: '選択して下さい。',id: 'fsjs_journal_credit_account_id'   
+
+  div.alert.alert-primary role="alert" =  '金額'
+  .form-group
+    = f.number_field :money, class: 'form-control', id: 'fsjs_journal_money'
+    
+  div.alert.alert-primary role="alert" =  '摘要'
+  .form-group
+    p 
+      = "(例)1/24 ご依頼○○様、○○広告収入、○○銀行、 クレジットカード(○○代)、○○引き落とし、携帯通信料金(按分50%)など"
+    = f.text_field :summary, class: 'form-control', id: 'fsjs_journal_summary'
+  
+  br
+  br    
+  = f.submit yield(:submit) , class: 'btn btn-primary'  
+
+= raw "\n"
+= raw '<script>' + "\n"
+= raw 'function run(){' + "\n"
+= raw '  var obj = document.getElementById("input_assistance");' + "\n"
+= raw '  document.getElementById("fsjs_journal_summary").value = obj.options[obj.selectedIndex].text' + "\n"
+= raw '}' + "\n"
+= raw '</script>' + "\n"

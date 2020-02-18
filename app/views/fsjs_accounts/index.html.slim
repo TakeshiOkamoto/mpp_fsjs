@@ -1,0 +1,57 @@
+- provide(:title, '勘定科目')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item.active aria-current="page" = '勘定科目'
+    
+p
+h1 勘定科目
+p
+
+= raw '<p>この画面は<span style="color:red;">システム設定</span>です。複式簿記がわからない方は操作しないでください。</p>'
+
+p
+  = raw "「損益計算書」で利用できる経費の科目は全て登録済みです。その他に必要であれば追加して下さい。"
+  = raw '<br>※不要な経費の科目は削除して頂いても構いません。'
+  = raw '<br>※誤って変更した場合は「fsjs_accounts.csv」を使用すればデータを復元できます。'
+
+table.table.table-hover
+  thead 
+    tr
+      th = FsjsAccount.human_attribute_name(:name)
+      th = FsjsAccount.human_attribute_name(:types)
+      th = FsjsAccount.human_attribute_name(:expense_flg)
+      th = FsjsAccount.human_attribute_name(:sort_list)
+      th = FsjsAccount.human_attribute_name(:sort_expense)
+      th
+  - @fsjs_accounts.each do |fsjs_account|
+    tr
+      td
+        = link_to fsjs_account.name, fsjs_account
+      td
+        = fsjs_get_account_types_from_id(fsjs_account.types)
+      td
+        = fsjs_account.expense_flg
+      td
+        = fsjs_account.sort_list
+      td
+        = fsjs_account.sort_expense
+      td
+        = link_to '編集', edit_fsjs_account_path(fsjs_account), class: 'btn btn-primary' 
+        = raw "&nbsp;&nbsp;&nbsp;"
+        = link_to '削除', fsjs_account, method: :delete, data: { confirm: "\n#{fsjs_account.name} を削除します。よろしいですか？"  }, class: 'btn btn-danger' 
+
+br
+= link_to '勘定科目の新規登録', new_fsjs_account_path,class: 'btn btn-primary'  
+
+br
+br
+br
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item.active aria-current="page" = '勘定科目'
+
+p      

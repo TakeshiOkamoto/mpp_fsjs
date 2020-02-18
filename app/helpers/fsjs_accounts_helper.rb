@@ -1,0 +1,2 @@
+module FsjsAccountsHelper
+end

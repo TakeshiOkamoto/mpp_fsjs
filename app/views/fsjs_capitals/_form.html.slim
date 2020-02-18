@@ -1,0 +1,32 @@
+= form_with(model: @fsjs_capital, local: true) do |f|
+  - if @fsjs_capital.errors.any?
+    #error_explanation.text-danger
+      ul
+        - @fsjs_capital.errors.full_messages.each do |message|
+          li = message
+          
+  .form-group
+    = raw '<label for="fsjs_capital_yyyy">年 ※西暦4桁</label>'
+    = f.number_field :yyyy, class: 'form-control', id: 'fsjs_capital_yyyy'
+
+  div.alert.alert-primary role="alert"
+    =  '以下の4項目は1月1日(期首) 時点の「元入金」の金額を入力します。'
+    br
+    = '※ない場合は0を入力。繰越の場合は前年の12/31(期末)の金額を入力。'
+
+  .form-group
+    = f.label :m1      
+    = f.number_field :m1, class: 'form-control', id: 'fsjs_capital_m1'
+  .form-group
+    = raw '<label for="fsjs_capital_m2">その他の預金 ※通帳の残高</label>'
+    = f.number_field :m2, class: 'form-control', id: 'fsjs_capital_m2'
+  .form-group
+    = raw '<label for="fsjs_capital_m3">前払金 ※電子マネーの前払金など</label>'
+    = f.number_field :m3, class: 'form-control', id: 'fsjs_capital_m3'
+  .form-group
+    = raw '<label for="fsjs_capital_m4">未払金 ※クレジットカードの未払金など</label>'
+    = f.number_field :m4, class: 'form-control', id: 'fsjs_capital_m4'           
+  
+  br
+  br
+  = f.submit yield(:submit) , class: 'btn btn-primary'  

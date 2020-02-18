@@ -1,0 +1,52 @@
+- provide(:title, '会計年度')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item.active aria-current="page" = '会計年度'
+    
+p
+h1 会計年度
+p
+p
+   = raw "「元入金」とは新規開業または前年からの繰越の金額です。 "
+   
+-logger.debug(111)
+-logger.debug(FsjsCapital.human_attribute_name(:yyyy))
+table.table.table-hover 
+  thead
+    tr
+      th style="width:100px;"
+      th 
+      th = "元入金"
+      th
+  - @fsjs_capitals.each do |capital|
+    tr
+      td
+        = link_to '仕訳帳', fsjs_journals_path(yyyy: capital.yyyy), class: 'btn btn-outline-info'      
+      td
+        = capital.yyyy.to_s() + "年"
+        /= link_to(capital.yyyy.to_s() + "年", capital)
+      td       
+        = FsjsCapital.human_attribute_name(:m1) + " " + capital.m1.to_s(:delimited) + " "   
+        = FsjsCapital.human_attribute_name(:m2) + " " + capital.m2.to_s(:delimited) + " "   
+        = FsjsCapital.human_attribute_name(:m3) + " " + capital.m3.to_s(:delimited) + " "   
+        = FsjsCapital.human_attribute_name(:m4) + " " + capital.m4.to_s(:delimited)    
+      td
+        = link_to '編集', edit_fsjs_capital_path(capital), class: 'btn btn-primary' 
+        = raw "&nbsp;&nbsp;&nbsp;"
+        = link_to '削除', capital, method: :delete, data: { confirm: "\n#{capital.yyyy}年を削除します。よろしいですか？"  }, class: 'btn btn-danger' 
+
+br
+= link_to '会計年度の新規登録', new_fsjs_capital_path,class: 'btn btn-primary'  
+
+br
+br
+br
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", root_path) 
+    li.breadcrumb-item.active aria-current="page" = '会計年度'
+
+p        
