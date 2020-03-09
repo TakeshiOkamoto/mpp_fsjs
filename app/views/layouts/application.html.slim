@@ -16,16 +16,16 @@ html lang="ja"
     
   body
   
-    .app-title.navbar.navbar-expand-md.navbar-light.bg-primary
-     .navbar-brand.text-white
-       = ' ' +  t('contents.title')
+    .navbar.navbar-expand-md.navbar-light.bg-primary
+      .navbar-brand.text-white
+        = ' ' +  t('contents.title')
          
-     ul.navbar-nav.ml-auto
-       - if fsjs_current_user.present?
-         li.nav-item= link_to 'ホーム',  root_path, class: 'nav-link',style: "color:#fff;"  
-         li.nav-item= link_to '会計年度',  fsjs_capitals_path, class: 'nav-link',style: "color:#fff;"            
-         li.nav-item= link_to '勘定科目',  fsjs_accounts_path, class: 'nav-link',style: "color:#fff;" 
-         li.nav-item= link_to 'ログアウト',  logout_path, class: 'nav-link',style: "color:#fff;", method: :delete       
+      ul.navbar-nav.ml-auto
+        - if fsjs_current_user.present?
+          li.nav-item= link_to 'ホーム',  root_path, class: 'nav-link',style: "color:#fff;"  
+          li.nav-item= link_to '会計年度',  fsjs_capitals_path, class: 'nav-link',style: "color:#fff;"            
+          li.nav-item= link_to '勘定科目',  fsjs_accounts_path, class: 'nav-link',style: "color:#fff;" 
+          li.nav-item= link_to 'ログアウト',  logout_path, class: 'nav-link',style: "color:#fff;", method: :delete       
     .container
       - if flash.notice.present?
         .alert.alert-success id="msg_notice" = flash.notice
