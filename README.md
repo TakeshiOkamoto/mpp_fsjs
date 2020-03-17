@@ -100,11 +100,6 @@ app/assetsにimagesフォルダを手動で生成する。
 ```
 ※コレを行わないと「Completed 500 Internal Server Error」になりますのでご注意。  
   
-### CSS/JSファイルをプリコンパイルする
-```rb  
-bin/rails assets:precompile  
-```  
-
 ### 管理ユーザーの作成
 ```rb  
 bin/rails c  
